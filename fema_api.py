@@ -1,39 +1,41 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-import joblib
 import pandas as pd
-import os
-import yfinance as yf
 import numpy as np
-import warnings
-from yfinance.shared import _ERRORS
-import os
+import yfinance as yf
 import joblib
+import warnings
+import os
 
 # Suppress annoying FutureWarnings from yfinance
 warnings.filterwarnings("ignore", message="YF.download")
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-fema_df = pd.read_csv(os.path.join(BASE_DIR, "fema_disasters.csv"), low_memory=False)
-
-
+# -------------------------------
+# Initialize app
+# -------------------------------
 app = FastAPI()
 
-
-BASE_DIR = os.path.dirname(__file__)
-model_path = os.path.join(BASE_DIR, "fema_ng_model.pkl")
-model = joblib.load(model_path)
-
-
-# Allow local frontend to access the API
+# ✅ Enable CORS so your Next.js app can reach the backend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_origins=[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# -------------------------------
+# Load data and model
+# -------------------------------
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+fema_df = pd.read_csv(os.path.join(BASE_DIR, "fema_disasters.csv"), low_memory=False)
+
+model_path = os.path.join(BASE_DIR, "fema_ng_model.pkl")
+model = joblib.load(model_path)
 
 
 # -------------------------------
