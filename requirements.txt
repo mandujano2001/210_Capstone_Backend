@@ -1,7 +1,7 @@
-fastapi
-uvicorn
-pandas
-scikit-learn
-joblib
-yfinance
-python-multipart
+fastapi==0.121.0
+uvicorn==0.38.0
+pandas==2.3.3
+scikit-learn==1.6.1
+joblib==1.4.2
+yfinance==0.2.66
+python-multipart==0.0.20
